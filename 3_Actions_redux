@@ -1,0 +1,42 @@
+Actions-
+
+
+The only way we can interact with the store
+
+Carry info from your app to store
+
+
+Plain javascript objects
+
+They have a type property indicating the type of action being performed
+
+The type property is defined as string constants
+
+
+____________________________________________________
+
+We also have action creator - a function that returns a action
+
+
+First is we declare string constants-
+
+const BUY_CAKE = "BUY_CAKE";
+
+
+
+Then action creation - object with type and some info
+
+  {
+        type: BUY_CAKE,
+        info:'this is the first action'
+    }
+
+
+We wrap the action in function - that is called action creators - function that returns actions
+
+function buyCake(){
+    return {
+        type: BUY_CAKE,
+        info:'this is the first action'
+    }
+}
