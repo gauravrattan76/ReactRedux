@@ -1,0 +1,85 @@
+Redux store-
+
+
+One store for entire app
+
+1. Holds the application state
+2. Allows access to state via getState()
+3.allow state to be updated via dispatch(action)
+4.  Register listener vis subcribe(listener)
+5. Handles of unregistered of listeners via the function returned via subcribe()
+
+
+_____________________
+
+
+Import the redux package
+Const redux = require(‘redux’)
+Const createStore = redux.createStore
+
+
+// crestestore method takes the reducer function
+Const store = createStore(myreducer)
+
+
+
+Store.getState() to get the vale
+
+
+Store.subcribe(() => store.getState())
+
+
+Store.dispacth(action creators)
+
+
+unsubcribe()
+
+
+_______
+
+
+Code - 
+
+const redux = require('redux')
+const createStore = redux.legacy_createStore ;
+ 
+ const BUY_CAKES ='BUY_CAKES'
+
+ function buyCakes(){
+    return {
+        type: BUY_CAKES,
+        info: 'value from actions'
+     }
+ }
+
+ const initialState = {
+    numberOfCakes: 10
+ }
+
+ const myReducer =(state = initialState, action) =>{
+    switch(action.type)
+    {
+        case BUY_CAKES : return {
+            ...state,
+            numberOfCakes:  state.numberOfCakes - 1
+        }
+        default : return state;
+    }
+
+ }
+
+ const store = createStore(myReducer);
+
+
+ console.log(store.getState())
+ const unsubcribe = store.subscribe(() => console.log("update value is", store.getState()))
+ store.dispatch(buyCakes())
+ store.dispatch(buyCakes())
+
+ store.dispatch(buyCakes())
+
+ store.dispatch(buyCakes())
+
+ unsubcribe();
+
+
