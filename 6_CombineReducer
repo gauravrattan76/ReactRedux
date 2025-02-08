@@ -1,0 +1,158 @@
+COMBINE REDUCER-
+
+Without combine reducer code is clumsy as one reduce taking care of everything , not good
+
+
+const myredcuer = combineReducer({
+key1: reducer1,
+key2: reducer 2
+})
+
+const store = createStore(myreducer)
+
+
+____________________________
+
+const redux = require('redux')
+const createStore = redux.legacy_createStore ;
+ 
+ const BUY_CAKES ='BUY_CAKES'
+ const BUY_ICECREAMS= 'BUY_ICECREAMS'
+
+
+ function buyCakes(){
+    return {
+        type: BUY_CAKES,
+        info: 'value from actions'
+     }
+ }
+
+ function buyIcecreams(){
+    return {
+        type: BUY_ICECREAMS,
+        info: 'value from actions'
+     }
+ }
+
+ const initialState = {
+    numberOfCakes: 10, 
+    numberOficecreams: 100
+ }
+
+
+
+ const myReducer =(state = initialState, action) =>{
+    switch(action.type)
+    {
+        case BUY_CAKES : return {
+            ...state,
+            numberOfCakes:  state.numberOfCakes - 1
+        }
+        case BUY_ICECREAMS : return {
+            ...state,
+            numberOficecreams:  state.numberOficecreams - 1
+        }
+        default : return state;
+    }
+
+ }
+
+ const store = createStore(myReducer);
+
+
+ console.log(store.getState())
+ const unsubcribe = store.subscribe(() => console.log("update value is", store.getState()))
+ store.dispatch(buyCakes())
+ store.dispatch(buyCakes())
+
+ store.dispatch(buyIcecreams())
+
+ store.dispatch(buyIcecreams())
+
+ unsubcribe();
+
+_______________________
+
+
+Code for combineReducer-
+
+
+const redux = require('redux')
+const createStore = redux.legacy_createStore ;
+const combineReducers = redux.combineReducers;
+ 
+ const BUY_CAKES ='BUY_CAKES'
+ const BUY_ICECREAMS= 'BUY_ICECREAMS'
+
+
+ function buyCakes(){
+    return {
+        type: BUY_CAKES,
+        info: 'value from actions'
+     }
+ }
+
+ function buyIcecreams(){
+    return {
+        type: BUY_ICECREAMS,
+        info: 'value from actions'
+     }
+ }
+
+ const initialCakeState = {
+    numberOfCakes: 10, 
+ }
+
+ const initialIcecreamState = {
+    numberOficecreams: 100
+ }
+
+
+
+ const myCakeReducer =(state = initialCakeState, action) =>{
+    switch(action.type)
+    {
+        case BUY_CAKES : return {
+            ...state,
+            numberOfCakes:  state.numberOfCakes - 1
+        }
+        default : return state;
+    }
+
+ }
+
+ const myIceCreamReducer =(state = initialIcecreamState, action) =>{
+    switch(action.type)
+    {
+        case BUY_ICECREAMS : return {
+            ...state,
+            numberOficecreams:  state.numberOficecreams - 1
+        }
+        default : return state;
+    }
+
+ }
+
+ const myReducer = combineReducers({
+    cakes:  myCakeReducer,
+    icecream: myIceCreamReducer
+ })
+
+ const store = createStore(myReducer);
+
+
+ console.log(store.getState())
+ const unsubcribe = store.subscribe(() => console.log("update value is", store.getState()))
+ store.dispatch(buyCakes())
+ store.dispatch(buyCakes())
+
+ store.dispatch(buyIcecreams())
+
+ store.dispatch(buyIcecreams())
+
+ unsubcribe();
+
+
+
+
+
