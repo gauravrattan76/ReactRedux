@@ -1,0 +1,39 @@
+Redux- 
+
+its a state management  library
+
+Redux stores the state of your application.
+
+1.Predictable state container for javascript apps
+
+It’s for javascript  apps.
+
+Its can be used with any js library or framework
+
+Best use case is to pass data between unrelated components with our props drilling
+
+_______________________________________________________
+
+
+With redux , the state is stored outside the components, if any component want to use it, it communicates with state container
+
+________________________________________________
+
+React - UI library
+
+Redux - is a state management library
+
+
+We have react-redux package - offers connect react app with redux
+
+React-redux is a package that binds react with redux
+
+________________________________________
+
+To create a redux project
+
+Create a folder- rpm init —yes  (it creates a package.json file without promot)
+
+npm install redux 
+
+Create a index.js file and we are good to go
