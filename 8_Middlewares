@@ -1,0 +1,83 @@
+Using middleware
+
+Middleware provides extra power to redux , like logging, asynchronous calls etc
+
+Import {applyMiddleware} from ’redux'
+
+
+Import logger from ‘redux-logger’
+Import {thunk} from ‘redux-thunk’
+
+
+
+Const store = createStore(reducer, applymiddleware(logger, thunk))
+
+
+_______________________’
+
+
+With thunk -
+
+
+The action creator doesn’t need to return a object
+
+But can return a function which takes dispatch as parameter
+
+And we can make api calls inside the function and dispatch our actions
+
+
+export const fetchUserRequest = () =>{
+    return {
+        type: FETCH_USER_REQUEST
+    }
+}
+
+export const fetchUserSuccess = (users) =>{
+    return {
+        type: FETCH_USER_SUCCESS,
+        payload:users
+    }
+}
+
+export const fetchUserError = (error) =>{
+    return {
+        type: FETCH_USER_ERROR,
+        payload:error
+    }
+}
+
+
+// this is the action creator we get with thunk
+export const getUser= () =>{
+    return (dispatch) =>{
+    dispatch(fetchUserRequest());
+    setTimeout(() =>{
+        axios.get('https://jsonplaceholder.typicode.com/users')
+        .then(res =>{
+            const arr = res.data.map(itm => itm.username)
+            dispatch(fetchUserSuccess(arr));
+
+        }).catch(err =>{
+            dispatch(fetchUserError(err.message))
+        })
+    },3000)
+    }
+}
+
+
+_________
+
+ In component we need to dispatch this action and listen to the data
+
+
+  const {loading, users, error} = useSelector(state  =>  state.user)
+    const dispatch = useDispatch();
+
+useEffect(() =>{
+ dispatch(getUser())
+},[])
+
+
+
+___________________________
+
