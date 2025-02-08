@@ -1,0 +1,39 @@
+3 core concepts in react
+
+1. Store-  holds The state of your application
+2. Action- describes the changes in state of application 
+3. Reducer - carries out state transition depending upon the action
+
+
+Rules-
+
+1. The state of your app is stored in a single object tree with in a single store
+2. The only way to changes state is to emit a action, an object describing what has happened
+
+
+You can’t directly state object
+State is ready only, only way to changes is via action 
+
+
+3. To specify how state tree us transformed by actions we write pure reducers
+
+Reducer takes initial state and action and returns new state
+
+
+Pure reducer -are pure functions
+
+
+Instead of updating previous state, returns new state
+
+
+________________________________________
+
+Javascript app —  component dispatches the action —— actions calls to reducers —— reducer returns new state —— passed to component
+
+_____________________________________
+
+
+
+
+
+
