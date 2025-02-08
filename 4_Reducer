@@ -1,0 +1,35 @@
+Reducer-
+
+Specify how the app state changes in response to the action sent to the store
+
+Reducer is a function that takes the initial state and action as arguments  and returns the new state
+
+(Prevstate, action) => new state
+
+_________________________________
+
+
+Code for reducer-
+
+
+const initialState = {
+    numberOfCakes: 10
+}
+
+const reducer = (state=  initialState, action)=>{
+    switch(action.type)
+    {
+        case BUY_CAKE: return {
+            ...state,
+            numberOfCakes: state.numberOfCakes - 1
+        }
+
+        default : return state;
+    }
+}
+
+
+________________________
+
+
+
