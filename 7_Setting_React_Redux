@@ -1,0 +1,254 @@
+Setting up Redux in react project-
+________________________________
+
+
+3 main packages -
+
+
+1. Redux - gives createStore, applyMiddleware, combineReducer
+2. React-redux - gives Provider, useSelector, useDispatch
+3. Redux-thunk - gives thunk middle ware for asynchronous call
+_____________________
+
+
+CakeActions.js-
+
+
+
+const BUY_CAKE = 'BUY_CAKE';
+
+export const buyCake = () =>{
+    return {
+        type: BUY_CAKE
+    }
+}
+
+
+___________
+
+
+CakeReducer.js
+
+// import {BUY_CAKE} from '/Users/gauravrattan/Documents/Coding/reactredux/reactredux/src/redux/cakeActionType'
+
+// import { BUY_CAKE } from "./cakeActionType";
+const BUY_CAKE = 'BUY_CAKE';
+
+const initialState = {
+    numberOfCakes: 100
+}
+
+export const cakeReducer =(state= initialState, action) =>
+{
+    switch(action.type)
+    {
+        case BUY_CAKE : return {
+            ...state,
+            numberOfCakes : state.numberOfCakes - 1
+        }
+        default:  return state;
+    }
+}
+
+
+
+______________
+
+
+UserActions.js
+
+
+
+import axios from 'axios'
+const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
+const FETCH_USER_SUCCESS= 'FETCH_USER_SUCCESS';
+const FETCH_USER_ERROR = 'FETCH_USER_ERROR';
+
+export const fetchUserRequest = () =>{
+    return {
+        type: FETCH_USER_REQUEST
+    }
+}
+
+export const fetchUserSuccess = (users) =>{
+    return {
+        type: FETCH_USER_SUCCESS,
+        payload:users
+    }
+}
+
+export const fetchUserError = (error) =>{
+    return {
+        type: FETCH_USER_ERROR,
+        payload:error
+    }
+}
+
+export const getUser= () =>{
+    return (dispatch) =>{
+    dispatch(fetchUserRequest());
+    setTimeout(() =>{
+        axios.get('https://jsonplaceholder.typicode.com/users')
+        .then(res =>{
+            const arr = res.data.map(itm => itm.username)
+            dispatch(fetchUserSuccess(arr));
+
+        }).catch(err =>{
+            dispatch(fetchUserError(err.message))
+        })
+    },3000)
+    }
+}
+
+____________
+
+
+UserReducer.js
+
+
+const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
+const FETCH_USER_SUCCESS= 'FETCH_USER_SUCCESS';
+const FETCH_USER_ERROR = 'FETCH_USER_ERROR';
+
+
+const inititalState ={
+    loading: false,
+    users: [],
+    error: ''
+}
+
+export const userReducer =(state= inititalState, action) =>
+    {
+        switch(action.type)
+        {
+            case FETCH_USER_REQUEST : return {
+                ...state,
+                loading: true
+            }
+            case FETCH_USER_SUCCESS : return {
+                loading: false,
+                users: action.payload,
+                error: ''
+            }
+            case FETCH_USER_ERROR : return {
+                loading: false,
+                users: [],
+                error: action.payload
+            }
+            default:  return state;
+        }
+    }
+    
+
+
+__________________
+
+
+Store.js
+
+import { legacy_createStore as createStore, applyMiddleware, combineReducers } from 'redux';
+import { cakeReducer } from './CakeReducer';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import logger from 'redux-logger'
+import { userReducer } from './UserReducer';
+import {thunk} from 'redux-thunk'
+
+const mainReducer = combineReducers({
+    cake: cakeReducer,
+    user: userReducer
+})
+
+export const store  = createStore(mainReducer,composeWithDevTools(applyMiddleware(logger, thunk)));
+
+__________________
+
+
+In index.js-
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import {Provider} from 'react-redux';
+import { store } from './redux/Store';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+<Provider store={store}>
+    <App />
+    </Provider>
+
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
+
+
+_____________
+
+Comp1.js-
+
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { buyCake } from '../redux/CakeActions';
+
+
+const Comp1  = () =>{
+    const data = useSelector(state => state) 
+   const dispatch = useDispatch();
+    return(
+        <>
+        First component--
+        <br />
+        {data.numberOfCakes}
+        <br />
+        <button onClick={() => dispatch(buyCake())}>buy cakes</button>
+        </>
+    )
+}
+
+export default Comp1
+
+
+
+________
+
+User.js-
+
+import React,{useEffect} from 'react'
+import { useSelector,useDispatch } from 'react-redux'
+import { getUser } from '../redux/UserActions';
+
+const User = () =>{
+    const {loading, users, error} = useSelector(state  =>  state.user)
+    const dispatch = useDispatch();
+
+useEffect(() =>{
+ dispatch(getUser())
+},[])
+
+    return(
+        <>
+        {loading && (<>Fetching the data</>)}
+      
+        <br />
+        {
+            users?.map(item =>{
+                return <ul>
+                    <li>{item}</li>
+                </ul>
+            })
+        }
+        {error && (<>we have an error</>)}
+        </>
+    )
+}
+
+export default User
+
+
+
